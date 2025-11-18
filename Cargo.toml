@@ -2,7 +2,7 @@
 name = "rust-network-scanner"
 version = "0.1.0"
 edition = "2021"
-authors = ["Tony Chuks Awunor <your-email@example.com>"]
+authors = ["Tony Chuks Awunor <chuksawunor@guardsarm.com>"]
 description = "Memory-safe network security scanner for vulnerability assessment"
 license = "MIT"
 repository = "https://github.com/guardsarm/rust-network-scanner"
