@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["Tony Chuks Awunor <your-email@example.com>"]
 description = "Memory-safe network security scanner for vulnerability assessment"
 license = "MIT"
-repository = "https://github.com/your-username/rust-network-scanner"
+repository = "https://github.com/guardsarm/rust-network-scanner"
 keywords = ["security", "network", "scanner", "vulnerability", "memory-safe"]
 categories = ["network-programming", "development-tools"]
 
