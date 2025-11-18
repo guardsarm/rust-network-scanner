@@ -195,10 +195,13 @@ MIT License - See LICENSE file
 ## Author
 
 Tony Chuks Awunor
-- Former FINMA-regulated forex broker operator (2008-2013)
+
 - M.S. Computer Science (CGPA: 4.52/5.00)
+- EC-Council Certified Ethical Hacker v13 AI (CEH v13 AI)
 - EC-Council Certified SOC Analyst (CSA)
-- Specialization: Memory-safe network security tools for financial infrastructure
+- Specialization: Memory-safe cryptographic systems and financial security infrastructure
+- Research interests: Rust security implementations, threat detection, and vulnerability assessment
+- Published crates: rust-crypto-utils, rust-secure-logger, rust-threat-detector, rust-transaction-validator, rust-network-scanner, rust-memory-safety-examples
 
 ## Contributing
 
