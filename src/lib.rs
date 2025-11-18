@@ -122,9 +122,7 @@ impl ScanResult {
     pub fn get_high_risk_ports(&self) -> Vec<&PortScanResult> {
         self.open_ports
             .iter()
-            .filter(|p| {
-                matches!(p.risk_level, PortRiskLevel::Critical | PortRiskLevel::High)
-            })
+            .filter(|p| matches!(p.risk_level, PortRiskLevel::Critical | PortRiskLevel::High))
             .collect()
     }
 
@@ -267,7 +265,7 @@ impl NetworkScanner {
         }
 
         // Process remaining tasks
-        let mut all_results = join_all(tasks).await;
+        let all_results = join_all(tasks).await;
 
         let scan_end = Utc::now();
 
@@ -302,8 +300,8 @@ impl NetworkScanner {
     /// Scan common ports (top 20)
     pub async fn scan_common_ports(&self, ip: IpAddr) -> Result<ScanResult, ScanError> {
         let common_ports = vec![
-            20, 21, 22, 23, 25, 53, 80, 110, 143, 443, 445, 993, 995, 3306, 3389, 5432, 5900,
-            8080, 8443, 27017,
+            20, 21, 22, 23, 25, 53, 80, 110, 143, 443, 445, 993, 995, 3306, 3389, 5432, 5900, 8080,
+            8443, 27017,
         ];
 
         let scan_start = Utc::now();
@@ -376,26 +374,20 @@ impl NetworkScanner {
     /// Grab service banner from open port
     async fn grab_banner(stream: &mut TcpStream, port: u16) -> Result<String, ScanError> {
         // Send protocol-specific probes
-        let probe = match port {
+        let probe: &[u8] = match port {
             80 | 8080 => b"HEAD / HTTP/1.0\r\n\r\n",
             21 | 22 | 23 | 25 => b"", // These typically send banner on connect
-            _ => b"", // Default: just read
+            _ => b"",                 // Default: just read
         };
 
         if !probe.is_empty() {
-            let _ = timeout(
-                Duration::from_millis(500),
-                stream.write_all(probe),
-            )
-            .await;
+            let _ = timeout(Duration::from_millis(500), stream.write_all(probe)).await;
         }
 
         let mut buffer = vec![0u8; 1024];
         match timeout(Duration::from_millis(500), stream.read(&mut buffer)).await {
             Ok(Ok(n)) if n > 0 => {
-                let banner = String::from_utf8_lossy(&buffer[..n])
-                    .trim()
-                    .to_string();
+                let banner = String::from_utf8_lossy(&buffer[..n]).trim().to_string();
                 if !banner.is_empty() {
                     Ok(banner)
                 } else {
@@ -545,17 +537,12 @@ mod tests {
 
         assert!(result.port == 9999);
         // Status could be Closed or Filtered depending on system
-        assert!(
-            result.status == PortStatus::Closed || result.status == PortStatus::Filtered
-        );
+        assert!(result.status == PortStatus::Closed || result.status == PortStatus::Filtered);
     }
 
     #[tokio::test]
     async fn test_service_detection() {
-        assert_eq!(
-            NetworkScanner::detect_service(80),
-            Some("HTTP".to_string())
-        );
+        assert_eq!(NetworkScanner::detect_service(80), Some("HTTP".to_string()));
         assert_eq!(
             NetworkScanner::detect_service(443),
             Some("HTTPS".to_string())
@@ -596,7 +583,10 @@ mod tests {
             NetworkScanner::assess_port_risk(23),
             PortRiskLevel::Critical
         ); // Telnet
-        assert_eq!(NetworkScanner::assess_port_risk(21), PortRiskLevel::Critical); // FTP
+        assert_eq!(
+            NetworkScanner::assess_port_risk(21),
+            PortRiskLevel::Critical
+        ); // FTP
 
         // High risk
         assert_eq!(NetworkScanner::assess_port_risk(3389), PortRiskLevel::High); // RDP
@@ -699,7 +689,7 @@ mod tests {
         };
 
         let duration = result.scan_duration_secs();
-        assert!(duration >= 0.1 && duration < 1.0);
+        assert!((0.1..1.0).contains(&duration));
     }
 
     #[tokio::test]

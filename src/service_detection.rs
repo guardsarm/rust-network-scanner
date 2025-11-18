@@ -67,7 +67,9 @@ impl ServiceSignatures {
     fn extract_ssh_version(banner: &str) -> Option<String> {
         if let Some(start) = banner.find("SSH-") {
             let version_str = &banner[start..];
-            if let Some(end) = version_str.find(|c: char| c.is_whitespace() || c == '\r' || c == '\n') {
+            if let Some(end) =
+                version_str.find(|c: char| c.is_whitespace() || c == '\r' || c == '\n')
+            {
                 return Some(version_str[..end].to_string());
             }
         }
@@ -183,7 +185,11 @@ impl BannerGrabber {
     }
 
     /// Grab banner with HTTP probe
-    pub async fn grab_http_banner(host: &str, port: u16, timeout_ms: u64) -> Result<String, String> {
+    pub async fn grab_http_banner(
+        host: &str,
+        port: u16,
+        timeout_ms: u64,
+    ) -> Result<String, String> {
         let addr = format!("{}:{}", host, port);
         let connect_timeout = Duration::from_millis(timeout_ms);
 
@@ -200,10 +206,13 @@ impl BannerGrabber {
             host
         );
 
-        timeout(Duration::from_millis(timeout_ms), stream.write_all(request.as_bytes()))
-            .await
-            .map_err(|_| "Write timeout".to_string())?
-            .map_err(|e| format!("Write failed: {}", e))?;
+        timeout(
+            Duration::from_millis(timeout_ms),
+            stream.write_all(request.as_bytes()),
+        )
+        .await
+        .map_err(|_| "Write timeout".to_string())?
+        .map_err(|e| format!("Write failed: {}", e))?;
 
         // Read response
         let mut buffer = vec![0u8; 4096];
@@ -239,8 +248,9 @@ mod tests {
 
     #[test]
     fn test_mysql_detection() {
-        let banner = "5.7.32-0ubuntu0.18.04.1";
-        let service = ServiceSignatures::detect_from_banner("mysql 5.7.32-0ubuntu0.18.04.1").unwrap();
+        let _banner = "5.7.32-0ubuntu0.18.04.1";
+        let service =
+            ServiceSignatures::detect_from_banner("mysql 5.7.32-0ubuntu0.18.04.1").unwrap();
         assert_eq!(service.name, "MySQL");
     }
 

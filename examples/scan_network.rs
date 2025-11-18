@@ -84,6 +84,7 @@ async fn main() {
         timeout_ms: 500,       // Faster timeout
         concurrent_scans: 200, // More concurrent scans
         detect_services: true,
+        grab_banners: true,
     };
 
     let fast_scanner = NetworkScanner::with_config(custom_config);
@@ -127,17 +128,15 @@ async fn main() {
     println!("\n5. Exporting Results as JSON");
 
     match scanner.scan_common_ports(ip).await {
-        Ok(result) => {
-            match result.to_json() {
-                Ok(json) => {
-                    println!("   JSON export successful:");
-                    println!("{}", json);
-                }
-                Err(e) => {
-                    eprintln!("   JSON export error: {}", e);
-                }
+        Ok(result) => match result.to_json() {
+            Ok(json) => {
+                println!("   JSON export successful:");
+                println!("{}", json);
             }
-        }
+            Err(e) => {
+                eprintln!("   JSON export error: {}", e);
+            }
+        },
         Err(e) => {
             eprintln!("   Scan error: {}", e);
         }
