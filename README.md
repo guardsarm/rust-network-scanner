@@ -1,5 +1,10 @@
 # Rust Network Scanner
 
+[![CI](https://github.com/guardsarm/rust-network-scanner/actions/workflows/ci.yml/badge.svg)](https://github.com/guardsarm/rust-network-scanner/actions/workflows/ci.yml)
+[![Crates.io](https://img.shields.io/crates/v/rust-network-scanner.svg)](https://crates.io/crates/rust-network-scanner)
+[![Documentation](https://docs.rs/rust-network-scanner/badge.svg)](https://docs.rs/rust-network-scanner)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A memory-safe, asynchronous network security scanner for vulnerability assessment and network monitoring. Built with Rust and Tokio for high-performance concurrent scanning.
 
 ## Security-First Design
@@ -205,9 +210,9 @@ This tool is for authorized security testing only. The author is not responsible
 
 ## Related Projects
 
-- [rust-secure-logger](https://github.com/your-username/rust-secure-logger) - Secure logging with cryptographic integrity
-- [rust-threat-detector](https://github.com/your-username/rust-threat-detector) - SIEM threat detection
-- [rust-crypto-utils](https://github.com/your-username/rust-crypto-utils) - Cryptographic utilities
+- [rust-secure-logger](https://github.com/guardsarm/rust-secure-logger) - Secure logging with cryptographic integrity
+- [rust-threat-detector](https://github.com/guardsarm/rust-threat-detector) - SIEM threat detection
+- [rust-crypto-utils](https://github.com/guardsarm/rust-crypto-utils) - Cryptographic utilities
 
 ## Citation
 
@@ -215,7 +220,7 @@ If you use this scanner in research or security assessments, please cite:
 
 ```
 Awunor, T.C. (2024). Rust Network Scanner: Memory-Safe Network Security Assessment.
-https://github.com/your-username/rust-network-scanner
+https://github.com/guardsarm/rust-network-scanner
 ```
 
 ---
