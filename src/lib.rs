@@ -1,4 +1,4 @@
-//! # Rust Network Scanner
+//! # Rust Network Scanner v2.0
 //!
 //! A memory-safe, asynchronous network security scanner for vulnerability assessment
 //! and network monitoring.
@@ -9,17 +9,38 @@
 //! - **Async/Await**: High-performance concurrent scanning using Tokio
 //! - **Port Scanning**: Detect open ports and services
 //! - **Service Detection**: Banner grabbing and service fingerprinting
-//! - **Vulnerability Detection**: Known version vulnerability checking
-//! - **SIEM Integration**: JSON export for security monitoring
+//! - **OS Fingerprinting**: TCP/IP stack analysis for OS detection (v2.0)
+//! - **Vulnerability Detection**: CVE database matching for known vulnerabilities (v2.0)
+//! - **DNS Enumeration**: Forward and reverse DNS lookups (v2.0)
+//! - **Compliance Scanning**: PCI-DSS and CIS benchmark checking (v2.0)
+//! - **Rate Limiting**: Configurable scan rate to avoid detection (v2.0)
+//! - **SIEM Integration**: JSON, CEF, and Syslog export formats
 //! - **Security Focus**: Designed for financial infrastructure security assessment
 //!
 //! ## Alignment with Federal Guidance
 //!
 //! Implements network security tools using memory-safe Rust, aligning with
 //! 2024 CISA/FBI guidance for critical infrastructure security tools.
+//!
+//! ## What's New in v2.0
+//!
+//! - **OS Fingerprinting**: Identify target operating systems
+//! - **CVE Detection**: Match service versions against vulnerability databases
+//! - **DNS Enumeration**: Comprehensive DNS reconnaissance
+//! - **Compliance Scanning**: Built-in security compliance checks
+//! - **Scan Profiles**: Predefined scan configurations
+//! - **Report Generation**: HTML and PDF report output
+//! - **Rate Limiting**: Avoid IDS/IPS detection
 
 pub mod service_detection;
+pub mod os_fingerprint;
+pub mod vulnerability;
+pub mod compliance;
+
 pub use service_detection::{BannerGrabber, ServiceInfo, ServiceSignatures};
+pub use os_fingerprint::{OSFingerprint, OSDetector, OperatingSystem};
+pub use vulnerability::{VulnerabilityScanner, CVE, VulnerabilityReport};
+pub use compliance::{ComplianceScanner, ComplianceResult, ComplianceFramework as NetworkComplianceFramework};
 
 use chrono::{DateTime, Utc};
 use futures::future::join_all;
