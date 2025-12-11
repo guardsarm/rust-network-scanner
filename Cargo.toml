@@ -36,10 +36,3 @@ criterion = "0.5"
 name = "scan_network"
 path = "examples/scan_network.rs"
 
-[[example]]
-name = "vulnerability_scan"
-path = "examples/vulnerability_scan.rs"
-
-[[bench]]
-name = "scanner_benchmark"
-harness = false

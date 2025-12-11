@@ -88,7 +88,10 @@ impl OSSignatures {
         );
         signatures.insert(
             "ttl:128:win:8192".to_string(),
-            (OperatingSystem::Windows(WindowsVersion::WindowsServer2019), 0.8),
+            (
+                OperatingSystem::Windows(WindowsVersion::WindowsServer2019),
+                0.8,
+            ),
         );
 
         // Linux signatures (TTL 64)
@@ -108,10 +111,7 @@ impl OSSignatures {
         );
 
         // Cisco signatures (TTL 255)
-        signatures.insert(
-            "ttl:255:cisco".to_string(),
-            (OperatingSystem::Cisco, 0.9),
-        );
+        signatures.insert("ttl:255:cisco".to_string(), (OperatingSystem::Cisco, 0.9));
 
         Self { signatures }
     }
@@ -334,10 +334,15 @@ mod tests {
         let detector = OSDetector::new();
 
         let ubuntu = detector.detect_from_banner("Ubuntu 22.04 LTS").unwrap();
-        assert!(matches!(ubuntu.os, OperatingSystem::Linux(LinuxDistro::Ubuntu)));
+        assert!(matches!(
+            ubuntu.os,
+            OperatingSystem::Linux(LinuxDistro::Ubuntu)
+        ));
         assert!(ubuntu.confidence >= 0.9);
 
-        let windows = detector.detect_from_banner("Microsoft Windows Server 2019").unwrap();
+        let windows = detector
+            .detect_from_banner("Microsoft Windows Server 2019")
+            .unwrap();
         assert!(matches!(windows.os, OperatingSystem::Windows(_)));
     }
 
@@ -352,7 +357,10 @@ mod tests {
             Some("OpenSSH 8.2p1 Ubuntu"),
         );
 
-        assert!(matches!(result.os, OperatingSystem::Linux(LinuxDistro::Ubuntu)));
+        assert!(matches!(
+            result.os,
+            OperatingSystem::Linux(LinuxDistro::Ubuntu)
+        ));
         assert!(result.confidence >= 0.9);
     }
 

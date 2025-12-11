@@ -168,7 +168,12 @@ impl ComplianceScanner {
     }
 
     /// Scan for PCI-DSS compliance
-    pub fn scan_pci_dss(&self, target: &str, open_ports: &[u16], services: &HashMap<u16, String>) -> ComplianceResult {
+    pub fn scan_pci_dss(
+        &self,
+        target: &str,
+        open_ports: &[u16],
+        services: &HashMap<u16, String>,
+    ) -> ComplianceResult {
         let mut result = ComplianceResult::new(target, ComplianceFramework::PCIDSS);
 
         // PCI-DSS 1.3.1 - Restrict inbound traffic
@@ -193,7 +198,12 @@ impl ComplianceScanner {
     }
 
     /// Scan for CIS Benchmark compliance
-    pub fn scan_cis_benchmark(&self, target: &str, open_ports: &[u16], services: &HashMap<u16, String>) -> ComplianceResult {
+    pub fn scan_cis_benchmark(
+        &self,
+        target: &str,
+        open_ports: &[u16],
+        services: &HashMap<u16, String>,
+    ) -> ComplianceResult {
         let mut result = ComplianceResult::new(target, ComplianceFramework::CISBenchmark);
 
         // CIS Control 4.1 - Secure configuration
@@ -238,12 +248,19 @@ impl ComplianceScanner {
             description: "No insecure or unnecessary ports should be accessible".to_string(),
             status,
             evidence,
-            remediation: Some("Close or firewall prohibited ports: Telnet (23), FTP (21), TFTP (69)".to_string()),
+            remediation: Some(
+                "Close or firewall prohibited ports: Telnet (23), FTP (21), TFTP (69)".to_string(),
+            ),
         });
     }
 
     /// Check encryption requirements (PCI-DSS 2.2.7)
-    fn check_encryption_required(&self, result: &mut ComplianceResult, open_ports: &[u16], services: &HashMap<u16, String>) {
+    fn check_encryption_required(
+        &self,
+        result: &mut ComplianceResult,
+        open_ports: &[u16],
+        _services: &HashMap<u16, String>,
+    ) {
         let unencrypted: Vec<u16> = open_ports
             .iter()
             .filter(|p| self.port_config.encryption_required_ports.contains(p))
@@ -265,16 +282,24 @@ impl ComplianceScanner {
         result.add_check(ComplianceCheck {
             id: "PCI-DSS-2.2.7".to_string(),
             framework: ComplianceFramework::PCIDSS,
-            requirement: "Use strong cryptography for non-console administrative access".to_string(),
+            requirement: "Use strong cryptography for non-console administrative access"
+                .to_string(),
             description: "All administrative access must be encrypted".to_string(),
             status,
             evidence,
-            remediation: Some("Replace HTTP with HTTPS, use IMAPS/POP3S instead of IMAP/POP3".to_string()),
+            remediation: Some(
+                "Replace HTTP with HTTPS, use IMAPS/POP3S instead of IMAP/POP3".to_string(),
+            ),
         });
     }
 
     /// Check secure administrative access (PCI-DSS 2.3)
-    fn check_secure_admin(&self, result: &mut ComplianceResult, open_ports: &[u16], _services: &HashMap<u16, String>) {
+    fn check_secure_admin(
+        &self,
+        result: &mut ComplianceResult,
+        open_ports: &[u16],
+        _services: &HashMap<u16, String>,
+    ) {
         // Check for SSH (secure) vs Telnet (insecure)
         let has_telnet = open_ports.contains(&23);
         let has_ssh = open_ports.contains(&22);
@@ -300,7 +325,9 @@ impl ComplianceScanner {
             description: "Use SSH instead of Telnet for remote administration".to_string(),
             status,
             evidence,
-            remediation: Some("Disable Telnet and use SSH with key-based authentication".to_string()),
+            remediation: Some(
+                "Disable Telnet and use SSH with key-based authentication".to_string(),
+            ),
         });
     }
 
@@ -328,7 +355,8 @@ impl ComplianceScanner {
         result.add_check(ComplianceCheck {
             id: "PCI-DSS-4.1".to_string(),
             framework: ComplianceFramework::PCIDSS,
-            requirement: "Use strong cryptography to protect cardholder data during transmission".to_string(),
+            requirement: "Use strong cryptography to protect cardholder data during transmission"
+                .to_string(),
             description: "All data transmission must be encrypted with TLS 1.2+".to_string(),
             status,
             evidence,
@@ -337,7 +365,11 @@ impl ComplianceScanner {
     }
 
     /// Check for insecure protocols (PCI-DSS 6.5.4)
-    fn check_insecure_protocols(&self, result: &mut ComplianceResult, services: &HashMap<u16, String>) {
+    fn check_insecure_protocols(
+        &self,
+        result: &mut ComplianceResult,
+        services: &HashMap<u16, String>,
+    ) {
         let insecure_services: Vec<String> = services
             .values()
             .filter(|s| {
@@ -410,12 +442,19 @@ impl ComplianceScanner {
             description: "Minimize attack surface by closing unnecessary ports".to_string(),
             status,
             evidence: format!("High-risk ports open: {:?}", high_risk_ports),
-            remediation: Some("Close or restrict high-risk ports, use encrypted alternatives".to_string()),
+            remediation: Some(
+                "Close or restrict high-risk ports, use encrypted alternatives".to_string(),
+            ),
         });
     }
 
     /// Check for unnecessary services (CIS Control 4.8)
-    fn check_unnecessary_services(&self, result: &mut ComplianceResult, open_ports: &[u16], _services: &HashMap<u16, String>) {
+    fn check_unnecessary_services(
+        &self,
+        result: &mut ComplianceResult,
+        open_ports: &[u16],
+        _services: &HashMap<u16, String>,
+    ) {
         let common_unnecessary: Vec<u16> = open_ports
             .iter()
             .filter(|p| [7, 9, 13, 17, 19, 37, 79].contains(p))
@@ -435,7 +474,9 @@ impl ComplianceScanner {
             description: "Legacy and unnecessary services should be disabled".to_string(),
             status,
             evidence: format!("Unnecessary service ports: {:?}", common_unnecessary),
-            remediation: Some("Disable echo, discard, daytime, chargen, finger services".to_string()),
+            remediation: Some(
+                "Disable echo, discard, daytime, chargen, finger services".to_string(),
+            ),
         });
     }
 
@@ -458,7 +499,9 @@ impl ComplianceScanner {
             description: "Limit network exposure to minimum necessary ports".to_string(),
             status,
             evidence: format!("{} ports open: {:?}", port_count, open_ports),
-            remediation: Some("Review and close unnecessary ports, implement firewall rules".to_string()),
+            remediation: Some(
+                "Review and close unnecessary ports, implement firewall rules".to_string(),
+            ),
         });
     }
 }

@@ -32,15 +32,17 @@
 //! - **Report Generation**: HTML and PDF report output
 //! - **Rate Limiting**: Avoid IDS/IPS detection
 
-pub mod service_detection;
-pub mod os_fingerprint;
-pub mod vulnerability;
 pub mod compliance;
+pub mod os_fingerprint;
+pub mod service_detection;
+pub mod vulnerability;
 
+pub use compliance::{
+    ComplianceFramework as NetworkComplianceFramework, ComplianceResult, ComplianceScanner,
+};
+pub use os_fingerprint::{OSDetector, OSFingerprint, OperatingSystem};
 pub use service_detection::{BannerGrabber, ServiceInfo, ServiceSignatures};
-pub use os_fingerprint::{OSFingerprint, OSDetector, OperatingSystem};
-pub use vulnerability::{VulnerabilityScanner, CVE, VulnerabilityReport};
-pub use compliance::{ComplianceScanner, ComplianceResult, ComplianceFramework as NetworkComplianceFramework};
+pub use vulnerability::{VulnerabilityReport, VulnerabilityScanner, CVE};
 
 use chrono::{DateTime, Utc};
 use futures::future::join_all;
